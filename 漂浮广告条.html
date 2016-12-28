@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        aside {
+            position: absolute;
+            left: 10px;
+            top: 90px;
+            width: 123px;
+            height: 290px;
+            background-color: #eee;
+            border: 1px solid gray;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        aside span {
+            display: block;
+            text-align: center;
+        }
+
+        body > img {
+            display: block;
+            width: 1190px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+<aside id="aside">
+    <a href="http://www.baidu.com"><img src="../images/leftAdv.jpg"/></a>
+    <span>关闭</span>
+</aside>
+<img src="../images/tb_bg.jpg"/>
+<script type="text/javascript">
+    var aside=document.querySelector("aside");
+    var span=aside.querySelector("span");
+    var img=aside.querySelector("img");
+    var disX= 3,disY=3;//图片的位移增量
+    var scrollX= 0,scrollY=0;//记录垂直和水平滚动条的当前位置
+    var timer=null;
+    function move(){
+        var maxWidth=window.innerWidth-aside.offsetWidth;//图片可以横向移动的范围
+        var maxHeight=window.innerHeight-aside.offsetHeight;
+        timer=setInterval(function(){
+            //如果广告移动到的屏幕的左右两边，更改x轴的移动方向
+            if(aside.offsetLeft-scrollX+disX>maxWidth || aside.offsetLeft+disX<scrollX){
+                disX=-disX;
+            }
+            if(aside.offsetTop-scrollY+disY>maxHeight || aside.offsetTop+disY<scrollY){
+                disY=-disY;
+            }
+            aside.style.left=aside.offsetLeft+disX+"px";
+            aside.style.top=aside.offsetTop+disY+"px";
+        },25);
+    }
+    move();
+    window.onscroll=function(){
+        var x=document.body.scrollLeft-scrollX;
+        var y=document.body.scrollTop-scrollY;//垂直滚动条的位移
+        aside.style.left=aside.offsetLeft+x+"px";
+        aside.style.top=aside.offsetTop+y+"px";
+        scrollX=document.body.scrollLeft;
+        scrollY=document.body.scrollTop;//记录垂直滚动条的当前位置
+    }
+    span.onclick=function(){
+        aside.style.display="none";
+    }
+    aside.onmouseover=function(){
+        clearInterval(timer);
+    }
+    aside.onmouseout=function(){
+        move();
+    }
+</script>
+</body>
+</html>
